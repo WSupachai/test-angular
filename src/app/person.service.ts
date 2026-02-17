@@ -23,7 +23,8 @@ export class PersonService {
   constructor(private http: HttpClient) { }
 
   getPeople(): Observable<Person[]> {
-    return this.http.get<Person[]>(this.apiUrl);
+    const timestamp = new Date().getTime();
+    return this.http.get<Person[]>(`${this.apiUrl}?t=${timestamp}`);
   }
 
   addPerson(person: Person): Observable<Person> {
