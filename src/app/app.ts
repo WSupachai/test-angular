@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // สำหรับทำ Form
 import { Person, PersonService } from './person.service';
-
+import { Observable } from 'rxjs'
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ import { Person, PersonService } from './person.service';
   styleUrl: './app.scss'
 })
 export class AppComponent implements OnInit {
-  people: Person[] = [];
+  people$!: Observable<Person[]>;
 
   // --- Modal ---
   showAddModal: boolean = false;   // ควบคุม Modal เพิ่มข้อมูล
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
     this.personService.getPeople().subscribe({
       next: (data) => {
         console.log('ได้รับข้อมูลแล้ว:', data); // เช็คว่าข้อมูลมาจริงไหม
-        this.people = data;
+        this.people$ = this.personService.getPeople();
       },
       error: (err) => {
         console.error('ดึงข้อมูลไม่สำเร็จ:', err); // เช็คว่ามี error ไหม
