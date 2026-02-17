@@ -6,6 +6,7 @@
   <table border="1" cellpadding="10" style="border-collapse: collapse; width: 100%;">
     <thead>
       <tr style="background: #333; color: white;">
+        <th>ลำดับ</th>
         <th>ชื่อ-นามสกุล</th>
         <th>ที่อยู่</th>
         <th>วันเกิด</th>
@@ -14,7 +15,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let p of people">
+      <tr *ngFor="let p of people let i = index">
+        <td>{{ i + 1 }}</td>
         <td>{{ p.firstName }} {{ p.lastName }}</td>
         <td>{{ p.address }}</td>
         <td>{{ p.birthDate }}</td>
@@ -71,7 +73,7 @@
       <p><strong>วันเกิด:</strong> {{ selectedPerson.birthDate }}</p>
       <p><strong>อายุ:</strong> {{ selectedPerson.age }} ปี</p>
       <p><strong>ที่อยู่:</strong> {{ selectedPerson.address }}</p>
-      <p><strong>ID:</strong> <span style="font-size: 0.8em; color: gray;">{{ selectedPerson.id }}</span></p>
+      <!--<p><strong>ID:</strong> <span style="font-size: 0.8em; color: gray;">{{ selectedPerson.id }}</span></p>-->
 
       <div style="text-align: right; margin-top: 20px;">
         <button class="btn-cancel" (click)="closeViewModal()">ปิด</button>
