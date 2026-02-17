@@ -17,7 +17,8 @@ export interface Person {
 
 export class PersonService {
 
-  private apiUrl = 'http://localhost:5209/people'; // Check Port  API .NET
+  //private apiUrl = 'http://localhost:5209/people'; // Check Port  API .NET
+  private apiUrl = 'https://coreapi-eakr.onrender.com/people'
 
   constructor(private http: HttpClient) { }
 
