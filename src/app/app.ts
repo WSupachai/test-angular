@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // สำหรับทำ Form
 import { Person, PersonService } from './person.service';
-import { Observable } from 'rxjs'
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ import { Observable } from 'rxjs'
   styleUrl: './app.scss'
 })
 export class AppComponent implements OnInit {
-  people$!: Observable<Person[]>;
+  people: any[] = [];
 
   // --- Modal ---
   showAddModal: boolean = false;   // ควบคุม Modal เพิ่มข้อมูล
@@ -27,25 +27,25 @@ export class AppComponent implements OnInit {
     birthDate: ''
   };
 
-  constructor(private personService: PersonService) { }
+  constructor(
+    private personService: PersonService,
+    private cdr: ChangeDetectorRef 
+) {}
 
-  ngOnInit() {
-    console.log('หน้าเว็บเริ่มทำงานแล้ว... กำลังดึงข้อมูล'); // ใส่ log ไว้เช็ค
-    this.loadPeople(); // <--- สั่งให้ดึงข้อมูลทันทีที่เปิดเว็บ
+  ngOnInit(): void {
+    console.log("เริ่มโหลดข้อมูลตอน Refresh...");
+    this.loadPeople();
   }
 
-  loadPeople() {
-    this.personService.getPeople().subscribe({
-      next: (data) => {
-        console.log('ได้รับข้อมูลแล้ว:', data); // เช็คว่าข้อมูลมาจริงไหม
-        this.people$ = this.personService.getPeople();
-      },
-      error: (err) => {
-        console.error('ดึงข้อมูลไม่สำเร็จ:', err); // เช็คว่ามี error ไหม
-      }
-    });
-  }
-
+loadPeople() {
+  this.personService.getPeople().subscribe({
+    next: (res) => {
+      this.people = res;
+      console.log("โหลดข้อมูลสำเร็จ:", res);
+      this.cdr.detectChanges(); // 3. สั่งให้ Angular วาดหน้าจอใหม่ทันทีที่ข้อมูลมา!
+    }
+  });
+}
   // --- Managed Modal Add ---
   openAddModal() { this.showAddModal = true; }
   closeAddModal() { this.showAddModal = false; }

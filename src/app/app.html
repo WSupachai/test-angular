@@ -14,7 +14,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let p of(people$ | async)">
+      <tr *ngFor="let p of people">
         <td>{{ p.firstName }} {{ p.lastName }}</td>
         <td>{{ p.address }}</td>
         <td>{{ p.birthDate }}</td>
