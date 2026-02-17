@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   showViewModal: boolean = false;  // ควบคุม Modal ดูข้อมูล
   selectedPerson: Person | null = null; // เก็บข้อมูลคนที่จะดู
 
-  
+
   newPerson: Person = {
     firstName: '',
     lastName: '',
@@ -30,12 +30,19 @@ export class AppComponent implements OnInit {
   constructor(private personService: PersonService) { }
 
   ngOnInit() {
-    this.loadPeople();
+    console.log('หน้าเว็บเริ่มทำงานแล้ว... กำลังดึงข้อมูล'); // ใส่ log ไว้เช็ค
+    this.loadPeople(); // <--- สั่งให้ดึงข้อมูลทันทีที่เปิดเว็บ
   }
 
   loadPeople() {
-    this.personService.getPeople().subscribe(data => {
-      this.people = data;
+    this.personService.getPeople().subscribe({
+      next: (data) => {
+        console.log('ได้รับข้อมูลแล้ว:', data); // เช็คว่าข้อมูลมาจริงไหม
+        this.people = data;
+      },
+      error: (err) => {
+        console.error('ดึงข้อมูลไม่สำเร็จ:', err); // เช็คว่ามี error ไหม
+      }
     });
   }
 
@@ -47,7 +54,7 @@ export class AppComponent implements OnInit {
     if (!this.newPerson.firstName) return;
     this.personService.addPerson(this.newPerson).subscribe(() => {
       this.loadPeople();
-      this.closeAddModal(); 
+      this.closeAddModal();
       this.newPerson = { firstName: '', lastName: '', address: '', birthDate: '' }; // Clear
     });
   }
@@ -69,9 +76,9 @@ export class AppComponent implements OnInit {
     return age.toString();
   }
 
-  // --- ManageD Modal GET---
+  // --- Managed Modal GET---
   openViewModal(person: Person) {
-    this.selectedPerson = person; 
+    this.selectedPerson = person;
     this.showViewModal = true;
   }
   closeViewModal() {
